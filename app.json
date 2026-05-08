@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "Mobile Issue Tracker",
+    "slug": "mobile-issue-tracker",
+    "version": "1.0.0",
+    "icon": "./assets/app-logo.png",
+    "splash": {
+      "image": "./assets/app-logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0b1220"
+    },
+    "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/app-logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.dasun001sorganization.mobileissuetracker"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "d0d635ab-e05d-47a9-b72e-ec9b1b3e619a"
+      }
+    },
+    "owner": "dasun001s-organization"
+  }
+}
