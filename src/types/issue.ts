@@ -9,6 +9,7 @@ export type Issue = {
   priority: IssuePriority;
   status: IssueStatus;
   assignee?: string;
+  imageUri?: string;
   createdAt: string;
   updatedAt: string;
 };
@@ -19,6 +20,7 @@ export type IssueInput = {
   priority: IssuePriority;
   status: IssueStatus;
   assignee?: string;
+  imageUri?: string;
 };
 
 export type IssueFilters = {

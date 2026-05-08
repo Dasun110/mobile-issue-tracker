@@ -138,6 +138,7 @@ export const useIssueStore = create<IssueState>()(
           id: generateIssueId(),
           ...input,
           assignee: input.assignee?.trim() || undefined,
+          imageUri: input.imageUri || undefined,
           createdAt: now,
           updatedAt: now,
         };
@@ -158,6 +159,7 @@ export const useIssueStore = create<IssueState>()(
                   ...issue,
                   ...input,
                   assignee: input.assignee?.trim() || undefined,
+                  imageUri: input.imageUri || undefined,
                   updatedAt: now,
                 }
               : issue

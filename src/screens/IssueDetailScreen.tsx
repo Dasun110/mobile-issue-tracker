@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native';
+import { Alert, Image, Pressable, ScrollView, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { StatusPill } from '../components/StatusPill';
 import { useIssueStore } from '../store/useIssueStore';
@@ -67,6 +67,13 @@ export const IssueDetailScreen = ({ route, navigation }: Props): JSX.Element => 
           <Text style={[styles.label, { color: palette.textMuted }]}>Description</Text>
           <Text style={[styles.value, { color: palette.text }]}>{issue.description}</Text>
         </View>
+
+        {issue.imageUri ? (
+          <View style={[styles.section, { backgroundColor: palette.background, borderColor: palette.border }]}>
+            <Text style={[styles.label, { color: palette.textMuted }]}>Attachment</Text>
+            <Image source={{ uri: issue.imageUri }} style={styles.attachmentImage} resizeMode="cover" />
+          </View>
+        ) : null}
 
         <View style={[styles.section, { backgroundColor: palette.background, borderColor: palette.border }]}>
           <Text style={[styles.label, { color: palette.textMuted }]}>Assignee</Text>
@@ -156,6 +163,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     marginTop: 10,
+  },
+  attachmentImage: {
+    width: '100%',
+    height: 200,
+    borderRadius: 12,
+    marginTop: 8,
   },
   label: {
     fontSize: 12,

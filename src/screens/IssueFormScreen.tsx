@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import {
   Alert,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -10,6 +11,7 @@ import {
   View,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import * as ImagePicker from 'expo-image-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { IssueInput, IssuePriority, IssueStatus } from '../types/issue';
 import { RootStackParamList } from '../types/navigation';
@@ -28,6 +30,7 @@ const baseInput: IssueInput = {
   priority: 'Medium',
   status: 'Open',
   assignee: '',
+  imageUri: undefined,
 };
 
 export const IssueFormScreen = ({ navigation, route }: Props): JSX.Element => {
@@ -52,11 +55,38 @@ export const IssueFormScreen = ({ navigation, route }: Props): JSX.Element => {
       priority: issue.priority,
       status: issue.status,
       assignee: issue.assignee ?? '',
+      imageUri: issue.imageUri,
     };
   }, [issue]);
 
   const [input, setInput] = useState<IssueInput>(initialInput);
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const pickImage = async (): Promise<void> => {
+    try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!permission.granted) {
+        Alert.alert('Permission required', 'Please allow photo library access to attach images.');
+        return;
+      }
+
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaType.Images,
+        allowsEditing: true,
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets.length > 0) {
+        setInput((prev) => ({ ...prev, imageUri: result.assets[0].uri }));
+      }
+    } catch (error) {
+      Alert.alert('Image picker failed', error instanceof Error ? error.message : 'Please try again.');
+    }
+  };
+
+  const removeImage = (): void => {
+    setInput((prev) => ({ ...prev, imageUri: undefined }));
+  };
 
   const submit = (): void => {
     const foundErrors = validateIssue(input);
@@ -201,6 +231,44 @@ export const IssueFormScreen = ({ navigation, route }: Props): JSX.Element => {
         onChangeText={(value) => setInput((prev) => ({ ...prev, assignee: value }))}
       />
 
+      <Text style={[styles.label, { color: palette.textMuted }]}>Attachment (optional)</Text>
+      <View style={styles.attachmentRow}>
+        <Pressable
+          style={({ pressed }) => [
+            styles.attachmentButton,
+            {
+              borderColor: palette.border,
+              backgroundColor: palette.surfaceAlt,
+              opacity: pressed ? 0.9 : 1,
+            },
+          ]}
+          onPress={pickImage}
+        >
+          <Text style={[styles.attachmentButtonText, { color: palette.text }]}>
+            {input.imageUri ? 'Change Image' : 'Attach Image'}
+          </Text>
+        </Pressable>
+        {input.imageUri ? (
+          <Pressable
+            style={({ pressed }) => [
+              styles.attachmentButton,
+              {
+                borderColor: palette.border,
+                backgroundColor: palette.background,
+                opacity: pressed ? 0.9 : 1,
+              },
+            ]}
+            onPress={removeImage}
+          >
+            <Text style={[styles.attachmentButtonText, { color: palette.danger }]}>Remove</Text>
+          </Pressable>
+        ) : null}
+      </View>
+
+      {input.imageUri ? (
+        <Image source={{ uri: input.imageUri }} style={styles.attachmentPreview} resizeMode="cover" />
+      ) : null}
+
           <Pressable
             style={({ pressed }) => [
               styles.primaryButton,
@@ -272,6 +340,27 @@ const styles = StyleSheet.create({
   },
   segmentText: {
     fontSize: 12,
+  },
+  attachmentRow: {
+    marginTop: 4,
+    flexDirection: 'row',
+    gap: 8,
+  },
+  attachmentButton: {
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+  },
+  attachmentButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  attachmentPreview: {
+    width: '100%',
+    height: 180,
+    marginTop: 10,
+    borderRadius: 12,
   },
   primaryButton: {
     marginTop: 20,
