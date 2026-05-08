@@ -98,7 +98,7 @@ Add these before final submission:
 3. APK/TestFlight build artifact (if required by reviewer)
 
 ### Android Preview Build (APK install page)
-- [EAS Build Link](https://expo.dev/accounts/dasun001s-organization/projects/mobile-issue-tracker/builds/8848b69d-a6ea-4a76-8462-c24cc791ca56)
+- [EAS Build Link](https://expo.dev/accounts/dasun001s-organization/projects/mobile-issue-tracker/builds/e9f375cf-bc54-4500-8569-b61e69f36cf6)
 
 ### APK Install QR
 Scan this QR code to open the Android build install page:
